@@ -2,7 +2,7 @@
 
 ### 使用本 API 需遵守本项目 LICENSE 协议，必须开源并保留 Neko歌姬计划 署名及源码链接！
 
-#### 更新时间 2026年9月21日
+#### 更新时间 2026年9月27日
 ## 概述
 
 Neko歌姬计划提供完整的 RESTful API，支持音乐搜索、播放、用户认证、收藏、横屏分享视频生成等功能。所有 API 都基于 HTTP/HTTPS 协议，使用 JSON 格式进行数据交换。
@@ -1830,6 +1830,7 @@ Content-Type: application/json
     "artist": "艺术家",
     "album": "专辑",
     "duration": 180,
+    "maxQuality": "sq",
     "coverUrl": "/api/music/cover/1",
     "fileUrl": "/api/music/file/1",
     "lyrics": "歌词内容"
@@ -1844,7 +1845,34 @@ Content-Type: application/json
 **路径参数:**
 - `id`: 音乐 ID
 
-**响应:** 音频文件 (响应标头content-type返回媒体格式，例如audio/flac)
+**查询参数:**
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `quality` | string | `hq` | 目标音质，可选 `standard`、`hq`、`sq`、`hires` |
+
+**示例:**
+
+```text
+GET /api/music/file/1?quality=hq
+```
+
+**音质规则:**
+
+- `standard`：标准音质，服务端按 128 kbps MP3 缓存生成。
+- `hq`：高品质，服务端按 320 kbps MP3 缓存生成。
+- `sq`：无损，只返回原始无损音源，不会把有损音源升码。
+- `hires`：Hi-Res，只返回原始 Hi-Res 音源；最高等级封顶为 `hires`。
+- 只允许从原始高音质向低音质转换，禁止低音质升码。
+- 请求的音质高于歌曲实际最高音质时，返回歌曲原始最高音质。
+- 未传 `quality` 时按 `hq` 请求；歌曲不支持 `hq` 时返回 `standard` 或原始音源。
+
+**响应:**
+
+- 接口返回 `302 Found`，通过 `Location` 重定向到站内固定媒体 URL。
+- 重定向后的媒体地址支持 `Range`、`ETag` 和 CDN 缓存。
+- `Content-Type` 根据实际文件格式返回，例如 `audio/mpeg`、`audio/flac`。
+- 首次请求 `standard` 或 `hq` 时，服务端会使用原生 FFmpeg 压缩并写入磁盘；后续请求直接复用缓存文件。
 
 ### 4. 获取音乐封面
 
