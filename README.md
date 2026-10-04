@@ -7,7 +7,7 @@
 
 Neko歌姬计划提供完整的 RESTful API，支持音乐搜索、播放、用户认证、收藏、横屏分享视频生成等功能。所有 API 都基于 HTTP/HTTPS 协议，使用 JSON 格式进行数据交换。
 
-**基础 URL:** `https://music.cnmsb.xin`
+**基础 URL:** `https://music.nekocore.cn`
 
 ## 目录
 
@@ -621,7 +621,7 @@ Content-Type: multipart/form-data
 async function uploadMusic(formData) {
   const token = localStorage.getItem('userToken');
   
-  const response = await fetch('https://music.cnmsb.xin/api/user/upload', {
+  const response = await fetch('https://music.nekocore.cn/api/user/upload', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`
@@ -770,7 +770,7 @@ Content-Type: application/json
 async function changeNickname(nickname) {
   const token = localStorage.getItem('userToken');
 
-  const response = await fetch('https://music.cnmsb.xin/api/user/nickname/change', {
+  const response = await fetch('https://music.nekocore.cn/api/user/nickname/change', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -853,7 +853,7 @@ Authorization: <token>
 async function getUserUploadedMusic() {
   const token = localStorage.getItem('userToken');
   
-  const response = await fetch('https://music.cnmsb.xin/api/user/uploaded-music', {
+  const response = await fetch('https://music.nekocore.cn/api/user/uploaded-music', {
     method: 'GET',
     headers: {
       'Authorization': token
@@ -1900,7 +1900,7 @@ GET /api/music/file/1?quality=hq
 **curl 示例:**
 
 ```bash
-curl -sS -X POST 'https://music.cnmsb.xin/api/music/recognize' \
+curl -sS -X POST 'https://music.nekocore.cn/api/music/recognize' \
   -F 'audio=@sample.m4a'
 ```
 
@@ -2025,7 +2025,7 @@ curl -sS -X POST 'https://music.cnmsb.xin/api/music/recognize' \
 **前端集成示例:**
 ```javascript
 async function getMusicRanking(limit = 200) {
-  const response = await fetch(`https://music.cnmsb.xin/api/music/ranking?limit=${limit}`, {
+  const response = await fetch(`https://music.nekocore.cn/api/music/ranking?limit=${limit}`, {
     method: 'GET'
   });
 
@@ -2089,7 +2089,7 @@ async function getMusicRanking(limit = 200) {
 **前端集成示例:**
 ```javascript
 async function getLatestMusic(limit = 300) {
-  const response = await fetch(`https://music.cnmsb.xin/api/music/latest?limit=${limit}`, {
+  const response = await fetch(`https://music.nekocore.cn/api/music/latest?limit=${limit}`, {
     method: 'GET'
   });
 
@@ -2218,7 +2218,7 @@ async function getLatestMusic(limit = 300) {
 删除是**物理删除**：记录直接从数据库移除，删楼层时会**连带删除该楼层下的全部回复**，不会留下占位楼层。
 
 ```bash
-curl -X DELETE 'https://music.cnmsb.xin/api/comments?id=14' \
+curl -X DELETE 'https://music.nekocore.cn/api/comments?id=14' \
   -H 'Authorization: <token>'
 ```
 
@@ -2373,7 +2373,7 @@ Authorization: <token>
 - 成功时返回 `video/mp4` 文件流，`Content-Disposition: attachment`。
 - 未完成返回 **409**；任务或文件不存在返回 **404**。
 - `jobId` 为 UUID，邮件中的链接形如：  
-  `https://music.cnmsb.xin/api/video/render/{jobId}/download`  
+  `https://music.nekocore.cn/api/video/render/{jobId}/download`  
   在浏览器或下载工具中直接打开即可，**不需要** Authorization 或 URL 参数 token。
 
 ### 4. 邮件通知
@@ -2391,7 +2391,7 @@ Authorization: <token>
 ```javascript
 // 创建任务（需登录）
 async function createVideoRenderJob(musicId, startSec = 0, watermarked = true) {
-  const res = await fetch('https://music.cnmsb.xin/api/video/render/create', {
+  const res = await fetch('https://music.nekocore.cn/api/video/render/create', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -2406,7 +2406,7 @@ async function createVideoRenderJob(musicId, startSec = 0, watermarked = true) {
 
 // 下载成片（无需登录）
 async function downloadVideoClip(jobId, filename = 'clip.mp4') {
-  const res = await fetch(`https://music.cnmsb.xin/api/video/render/${jobId}/download`);
+  const res = await fetch(`https://music.nekocore.cn/api/video/render/${jobId}/download`);
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.message || `下载失败 (${res.status})`);
@@ -2633,7 +2633,7 @@ data: {"total":75,"imported":70,"existed":3,"failed":2}
 
 ```javascript
 const token = localStorage.getItem('userToken');
-const base = 'https://music.cnmsb.xin/loser';
+const base = 'https://music.nekocore.cn/loser';
 
 // 方式一：导入到已有歌单（targetPlaylistId）
 const neteaseUrl = `${base}/netease/pull?playlistId=7011264340&targetPlaylistId=12&token=${encodeURIComponent(token)}`;
@@ -2693,7 +2693,7 @@ importPlaylist(neteaseUrl);
 
 ```javascript
 async function login(email, password) {
-  const response = await fetch('https://music.cnmsb.xin/api/user/login', {
+  const response = await fetch('https://music.nekocore.cn/api/user/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -2714,7 +2714,7 @@ async function login(email, password) {
 
 ```javascript
 async function searchMusic(query) {
-  const response = await fetch('https://music.cnmsb.xin/api/music/search', {
+  const response = await fetch('https://music.nekocore.cn/api/music/search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -2733,7 +2733,7 @@ async function searchMusic(query) {
 
 ```javascript
 async function searchMusicBatch(items) {
-  const response = await fetch('https://music.cnmsb.xin/api/music/search', {
+  const response = await fetch('https://music.nekocore.cn/api/music/search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -2755,7 +2755,7 @@ async function searchMusicBatch(items) {
 ```javascript
 async function getFavorites() {
   const token = localStorage.getItem('userToken');
-  const response = await fetch('https://music.cnmsb.xin/api/user/favorites', {
+  const response = await fetch('https://music.nekocore.cn/api/user/favorites', {
     method: 'GET',
     headers: {
       'Authorization': token
@@ -2774,7 +2774,7 @@ async function uploadAvatar(avatarFile) {
   const formData = new FormData();
   formData.append('avatar', avatarFile);
   
-  const response = await fetch('https://music.cnmsb.xin/api/user/avatar/upload', {
+  const response = await fetch('https://music.nekocore.cn/api/user/avatar/upload', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`
@@ -2796,7 +2796,7 @@ async function uploadAvatar(avatarFile) {
 
 ```javascript
 async function searchPlaylists(query) {
-  const response = await fetch('https://music.cnmsb.xin/api/playlists/search', {
+  const response = await fetch('https://music.nekocore.cn/api/playlists/search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -2825,7 +2825,7 @@ async function searchPlaylists(query) {
 
 ```javascript
 async function searchArtists(query) {
-  const response = await fetch('https://music.cnmsb.xin/api/artists/search', {
+  const response = await fetch('https://music.nekocore.cn/api/artists/search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -2856,7 +2856,7 @@ async function searchArtists(query) {
 ```javascript
 async function getPlaylistDetail(playlistId) {
   // 无需登录即可访问
-  const response = await fetch(`https://music.cnmsb.xin/api/playlist/${playlistId}`, {
+  const response = await fetch(`https://music.nekocore.cn/api/playlist/${playlistId}`, {
     method: 'GET'
   });
 
@@ -2884,7 +2884,7 @@ async function getPlaylistDetail(playlistId) {
 async function createPlaylist(name, description) {
   const token = localStorage.getItem('userToken');
   
-  const response = await fetch('https://music.cnmsb.xin/api/user/playlist/create', {
+  const response = await fetch('https://music.nekocore.cn/api/user/playlist/create', {
     method: 'POST',
     headers: {
       'Authorization': token,
@@ -2912,7 +2912,7 @@ async function createPlaylist(name, description) {
 async function getPlaylists() {
   const token = localStorage.getItem('userToken');
 
-  const response = await fetch('https://music.cnmsb.xin/api/user/playlists', {
+  const response = await fetch('https://music.nekocore.cn/api/user/playlists', {
     method: 'GET',
     headers: {
       'Authorization': token
@@ -2937,7 +2937,7 @@ async function getPlaylists() {
 async function updatePlaylist(playlistId, name, description) {
   const token = localStorage.getItem('userToken');
   
-  const response = await fetch('https://music.cnmsb.xin/api/user/playlist/update', {
+  const response = await fetch('https://music.nekocore.cn/api/user/playlist/update', {
     method: 'POST',
     headers: {
       'Authorization': token,
@@ -2968,7 +2968,7 @@ async function updatePlaylist(playlistId, name, description) {
 async function deletePlaylist(playlistId) {
   const token = localStorage.getItem('userToken');
 
-  const response = await fetch('https://music.cnmsb.xin/api/user/playlist/delete', {
+  const response = await fetch('https://music.nekocore.cn/api/user/playlist/delete', {
     method: 'POST',
     headers: {
       'Authorization': token,
@@ -2997,7 +2997,7 @@ async function deletePlaylist(playlistId) {
 ```javascript
 async function getPlaylistMusic(playlistId) {
   // 无需登录即可访问
-  const response = await fetch(`https://music.cnmsb.xin/api/user/playlist/music/${playlistId}`, {
+  const response = await fetch(`https://music.nekocore.cn/api/user/playlist/music/${playlistId}`, {
     method: 'GET'
   });
 
@@ -3021,7 +3021,7 @@ async function addMusicToPlaylist(playlistId, musicIds) {
   const token = localStorage.getItem('userToken');
   const ids = Array.isArray(musicIds) ? musicIds : [musicIds];
 
-  const response = await fetch('https://music.cnmsb.xin/api/user/playlist/music/add', {
+  const response = await fetch('https://music.nekocore.cn/api/user/playlist/music/add', {
     method: 'POST',
     headers: {
       'Authorization': token,
@@ -3054,7 +3054,7 @@ async function removeMusicFromPlaylist(playlistId, musicIds) {
   const token = localStorage.getItem('userToken');
   const ids = Array.isArray(musicIds) ? musicIds : [musicIds];
 
-  const response = await fetch('https://music.cnmsb.xin/api/user/playlist/music/remove', {
+  const response = await fetch('https://music.nekocore.cn/api/user/playlist/music/remove', {
     method: 'POST',
     headers: {
       'Authorization': token,
@@ -3088,7 +3088,7 @@ async function removeMusicFromPlaylist(playlistId, musicIds) {
 async function changePassword(oldPassword, newPassword) {
   const token = localStorage.getItem('userToken');
   
-  const response = await fetch('https://music.cnmsb.xin/api/user/password/change', {
+  const response = await fetch('https://music.nekocore.cn/api/user/password/change', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -3116,7 +3116,7 @@ async function changePassword(oldPassword, newPassword) {
 async function changeNickname(nickname) {
   const token = localStorage.getItem('userToken');
 
-  const response = await fetch('https://music.cnmsb.xin/api/user/nickname/change', {
+  const response = await fetch('https://music.nekocore.cn/api/user/nickname/change', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -3145,7 +3145,7 @@ async function changeNickname(nickname) {
 async function getFavoritePlaylists() {
   const token = localStorage.getItem('userToken');
   
-  const response = await fetch('https://music.cnmsb.xin/api/user/favorite-playlists', {
+  const response = await fetch('https://music.nekocore.cn/api/user/favorite-playlists', {
     method: 'GET',
     headers: {
       'Authorization': token
@@ -3173,7 +3173,7 @@ async function getFavoritePlaylists() {
 async function favoritePlaylist(playlistId) {
   const token = localStorage.getItem('userToken');
   
-  const response = await fetch('https://music.cnmsb.xin/api/user/favorite-playlists', {
+  const response = await fetch('https://music.nekocore.cn/api/user/favorite-playlists', {
     method: 'POST',
     headers: {
       'Authorization': token,
@@ -3203,7 +3203,7 @@ async function favoritePlaylist(playlistId) {
 async function unfavoritePlaylist(playlistId) {
   const token = localStorage.getItem('userToken');
   
-  const response = await fetch(`https://music.cnmsb.xin/api/user/favorite-playlists/${playlistId}`, {
+  const response = await fetch(`https://music.nekocore.cn/api/user/favorite-playlists/${playlistId}`, {
     method: 'DELETE',
     headers: {
       'Authorization': token
@@ -3227,7 +3227,7 @@ async function unfavoritePlaylist(playlistId) {
 async function getFavoritePlaylistMusic(playlistId) {
   const token = localStorage.getItem('userToken');
   
-  const response = await fetch(`https://music.cnmsb.xin/api/user/favorite-playlists/${playlistId}`, {
+  const response = await fetch(`https://music.nekocore.cn/api/user/favorite-playlists/${playlistId}`, {
     method: 'GET',
     headers: {
       'Authorization': token
@@ -3419,4 +3419,4 @@ Content-Type: application/json
 
 ## 联系方式
 
-如有问题或建议，请联系：support@cnmsb.xin
+如有问题或建议，请联系：support@nekocore.cn
