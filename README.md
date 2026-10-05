@@ -923,7 +923,7 @@ PC 端展示二维码，手机端（NekoMusic App）扫码确认后，PC 端自�
 
 **流程:**
 
-1. PC 端 `POST /api/user/qrlogin/create` 拿到 `sessionId` 与二维码内容并展示；
+1. PC 端 `POST /api/user/qrlogin/create` 拿到 `sessionId` 与二维码图片并展示；
 2. PC 端对 `GET /api/user/qrlogin/status` 建立 **SSE 长连接**，等待服务端推状态；
 3. 手机端扫码后带**自己的用户 Token** 调 `POST /api/user/qrlogin/scan`，PC 端收到 `scanned`；
 4. 用户在手机上确认（或拒绝）后调 `POST /api/user/qrlogin/confirm`；
@@ -948,7 +948,6 @@ nekomusic://qrlogin?sid=<sessionId>
   "message": "ok",
   "data": {
     "sessionId": "32位URL安全随机串",
-    "qrContent": "nekomusic://qrlogin?sid=32位URL安全随机串",
     "qrImage": "data:image/png;base64,...",
     "expiresIn": 180
   }
@@ -960,11 +959,13 @@ nekomusic://qrlogin?sid=<sessionId>
 | 字段 | 说明 |
 |------|------|
 | `sessionId` | 会话 ID，用于订阅状态 |
-| `qrContent` | 二维码原始内容（`nekomusic://qrlogin?sid=...`），供手机端解析 `sid` 等使用 |
 | `qrImage` | 服务端渲染好的二维码 PNG data URL，正中心已合成软件图标。客户端直接展示该图片即可，无需自行渲染 |
 | `expiresIn` | 二维码有效期（秒），固定 180 |
 
 **说明:** 二维码由服务端渲染，`qrImage` 恒定返回；渲染失败时本接口返回 `500`。
+
+> **破坏性变更（21.1）:** 响应不再返回 `qrContent`。客户端请直接展示 `qrImage`，不要再自行渲染二维码；
+> 二维码内容 `nekomusic://qrlogin?sid=<sessionId>` 已编码在图片内，扫码端解码图片即可获得。
 
 #### 21.2 订阅扫码状态（SSE，无需登录）
 
