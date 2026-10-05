@@ -949,10 +949,22 @@ nekomusic://qrlogin?sid=<sessionId>
   "data": {
     "sessionId": "32位URL安全随机串",
     "qrContent": "nekomusic://qrlogin?sid=32位URL安全随机串",
+    "qrImage": "data:image/png;base64,...",
     "expiresIn": 180
   }
 }
 ```
+
+**字段说明:**
+
+| 字段 | 说明 |
+|------|------|
+| `sessionId` | 会话 ID，用于订阅状态 |
+| `qrContent` | 二维码原始内容（`nekomusic://qrlogin?sid=...`），供手机端解析 `sid` 等使用 |
+| `qrImage` | 服务端渲染好的二维码 PNG data URL，正中心已合成软件图标。客户端直接展示该图片即可，无需自行渲染 |
+| `expiresIn` | 二维码有效期（秒），固定 180 |
+
+**说明:** 二维码由服务端渲染，`qrImage` 恒定返回；渲染失败时本接口返回 `500`。
 
 #### 21.2 订阅扫码状态（SSE，无需登录）
 
